@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    public Rigidbody2D PlayerRigidBody;
+    private Rigidbody2D PlayerRigidBody;
     public float moveSpeed;
     // Start is called before the first frame update
     void Start()
@@ -14,11 +14,15 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void fixedUpdate()
+    void FixedUpdate()
     {
         if (PlayerRigidBody != null)
         {
-            ApplyInput();
+            float xInput = Input.GetAxis("Horizontal");
+            float xForce = xInput * moveSpeed * Time.deltaTime;
+//            Vector2 force = new Vector2(xForce, 0);
+//            PlayerRigidBody.AddForce(force);
+            transform.Translate(new Vector2(xForce, 0));
         }
 
         else
@@ -27,18 +31,4 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    //Check to see if arrow keys are pressed and move character
-
-    public void ApplyInput()
-    {
-        float xInput = Input.GetAxis("x");
-        float yInput = Input.GetAxis("y");
-
-        float xForce = xInput * moveSpeed * Time.deltaTime;
-        Vector2 force = new Vector2(xForce, 0);
-        PlayerRigidBody.AddForce(force);
-
-        Debug.Log("xForce: " + xForce);
-        Debug.Log("VelocityplayerRigidbody " + PlayerRigidBody.velocity);
-    }
 }
